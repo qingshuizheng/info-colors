@@ -131,6 +131,17 @@
         (put-text-property (1- start) (point)
                            'font-lock-face 'info-colors-lisp-code-block)))))
 
+;; TODO 2023-01-04: not perfect at all
+;;;###autoload
+(defun info-colors-fontify-reference-blocks ()
+  "Fontify reference blocks in an `info' node."
+  (goto-char (point-min))
+  (while (re-search-forward
+          "^\s--\s\\(.*\n\\)\\(\s\s\s\s\s.*\n\\)*" nil t)
+    (put-text-property (match-beginning 0) (match-end 0)
+                       'font-lock-face 'fringe)))
+
+
 ;;; TODO: Use syntax table or something?
 ;;;###autoload
 (defun info-colors-fontify-reference-items ()
@@ -166,6 +177,7 @@
   (save-excursion
     (let* ((inhibit-read-only t)
            (case-fold-search t))
+      ;; (info-colors-fontify-reference-blocks)
       (info-colors-fontify-lisp-code-blocks)
       (info-colors-fontify-reference-items)
       (set-buffer-modified-p nil))))
